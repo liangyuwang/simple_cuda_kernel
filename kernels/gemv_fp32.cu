@@ -61,7 +61,7 @@ torch::Tensor gemv_fp32(torch::Tensor A,
     dim3 grid(M);
     dim3 block(BLOCK_SIZE);
     size_t shmem = (BLOCK_SIZE / WARP) * sizeof(float);
-    gemv_kernel<<<grid,block,shmem>>>(
+    gemv_fp32_kernel<<<grid,block,shmem>>>(
         A.data_ptr<float>(), x.data_ptr<float>(), y.data_ptr<float>(), M, N);
     
     return y;
