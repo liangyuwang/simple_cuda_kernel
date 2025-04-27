@@ -17,7 +17,7 @@ def check_accuracy(B: int = 12,
     x = torch.randn(B, M,    device=device, dtype=dtype)
     A = torch.randn(B, M, N, device=device, dtype=dtype)
 
-    # ------- gevm -------
+    # ------- batched gevm -------
     y_ref  = torch.matmul(x.unsqueeze(1), A).squeeze(1)
     y_impl = batched_gevm(x, A)
     abs_err  = (y_ref - y_impl).abs().max().item()
@@ -61,7 +61,7 @@ def benchmark_speed(B: int = 12,
     x = torch.randn(B, M,    device=device, dtype=dtype)
     A = torch.randn(B, M, N, device=device, dtype=dtype)
 
-    # gevm ----------------------------------------------------------
+    # batched gevm ----------------------------------------------------------
     t_custom = _timeitCUDA(lambda: batched_gevm(x, A),
                            warmup, repeat)
     t_torch  = _timeitCUDA(lambda: torch.matmul(x.unsqueeze(1), A).squeeze(1),
